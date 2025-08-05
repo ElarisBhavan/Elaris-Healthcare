@@ -8,11 +8,12 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <body>
-    <header id="main-header">
+<header id="main-header">
+  <div class="header-inner">
+    
+    <!-- Left: Menu or Hamburger -->
     <div class="header-left">
-      <button class="hamburger" aria-label="Toggle Menu">
-      ☰
-    </button>
+      <!-- Desktop Nav -->
       <nav class="nav-menu">
         <ul>
           <li><a href="#home">Home</a></li>
@@ -23,12 +24,19 @@
           <li><a href="#payer-expertise">Contact Us</a></li>
         </ul>
       </nav>
+
+      <!-- Mobile Hamburger -->
+      <button class="hamburger" aria-label="Toggle Menu">☰</button>
     </div>
+
+    <!-- Right: Logo and Brand -->
     <div class="header-right">
       <img src="logo.png" alt="Elaris Healthcare Logo" class="logo" />
       <span class="brand-text">Elaris Healthcare</span>
     </div>
-  </header>
+  </div>
+</header>
+
 
 <section id="home" class="hero-wave">
   <div class="hero-content">
@@ -364,14 +372,15 @@
     <h2 class="help-heading need">WHO <span class="highlight need">WE HELP</span></h2>
 
     <h3 class="who-subheading">
-      Supporting Every Corner of Healthcare —<br>With Precision and Purpose</h3>
+      Supporting Every Corner of Healthcare —<br>With Precision and Purpose
+    </h3>
 
-    <!-- Description -->
     <p class="who-description">
       At <strong>Elaris Healthcare</strong>, we proudly partner with a diverse range of healthcare providers across the United States.
       Our services are designed to adapt, scale, and perform — allowing you to focus on patient care while we manage your revenue cycle with precision.
     </p>
 
+    <!-- Help List -->
     <ul class="help-list">
       <li class="help-item animate-on-scroll" data-tooltip="We partner with acute care hospitals, outpatient departments, and multi-facility systems to manage high-volume, complex billing with precision. Our services ensure regulatory compliance, faster reimbursement cycles, and seamless EHR integrations.">🏥 Hospitals & Health Systems</li>
       <li class="help-item animate-on-scroll" data-tooltip="From solo practices to multi-specialty groups, we help reduce administrative burden, accelerate claim turnaround, and ensure accurate documentation-to-payment workflows. You focus on care — we handle the rest.">👨‍⚕️ Independent Physicians & Group Practices</li>
@@ -380,10 +389,12 @@
       <li class="help-item animate-on-scroll" data-tooltip="We deliver fast-paced billing support for urgent care and ASCs — reducing delays, preventing underpayments, and optimizing charge capture in real time.">🚑 Urgent Care & Ambulatory Centers</li>
     </ul>
 
-    <!-- Floating Tooltip -->
-    <div class="hover-description" id="hoverTooltip"></div>
+    <!-- Floating Tooltip Box -->
+    <div id="tooltipBox" class="tooltip-box"></div>
+    
   </div>
 </section>
+
 
 
 
