@@ -139,24 +139,51 @@ window.addEventListener("DOMContentLoaded", () => {
 //***-----------------Who We Help------------ */
 
 document.addEventListener("DOMContentLoaded", () => {
-  const tooltip = document.getElementById("hoverTooltip");
   const helpItems = document.querySelectorAll(".help-item");
+const tooltipBox = document.getElementById("tooltipBox");
 
-  helpItems.forEach(item => {
-    item.addEventListener("mouseenter", (e) => {
-      const detail = item.getAttribute("data-tooltip");
-      tooltip.innerText = detail;
-      tooltip.style.display = "block";
+let currentItem = null;
 
-      const rect = item.getBoundingClientRect();
-      tooltip.style.top = `${window.scrollY + rect.top - tooltip.offsetHeight - 10}px`;
-      tooltip.style.left = `${rect.left}px`;
-    });
+helpItems.forEach(item => {
+  item.addEventListener("click", (e) => {
+    e.stopPropagation(); // prevent from closing immediately
+    const desc = item.getAttribute("data-tooltip");
 
-    item.addEventListener("mouseleave", () => {
-      tooltip.style.display = "none";
-    });
+    // Toggle if same item clicked again
+    if (currentItem === item) {
+      tooltipBox.style.display = "none";
+      currentItem = null;
+      return;
+    }
+
+    currentItem = item;
+    tooltipBox.innerText = desc;
+    tooltipBox.style.display = "block";
+
+    // Get position and center above
+    const rect = item.getBoundingClientRect();
+    const boxWidth = tooltipBox.offsetWidth;
+    const boxHeight = tooltipBox.offsetHeight;
+
+    const left = rect.left + rect.width / 2 - boxWidth / 2;
+    const top = rect.top + window.scrollY - boxHeight - 12;
+
+    tooltipBox.style.left = `${left}px`;
+    tooltipBox.style.top = `${top}px`;
   });
+});
+
+// Hide tooltip on outside click
+document.addEventListener("click", () => {
+  tooltipBox.style.display = "none";
+  currentItem = null;
+});
+
+// Hide tooltip on scroll
+window.addEventListener("scroll", () => {
+  tooltipBox.style.display = "none";
+  currentItem = null;
+});
 });
 
 ///*********Contact Us */
