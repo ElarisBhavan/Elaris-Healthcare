@@ -23,10 +23,11 @@ window.addEventListener('scroll', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const hamburger = document.querySelector('.hamburger');
   const navMenu = document.querySelector('.nav-menu');
+  let lastScrollY = window.scrollY;
 
   // Toggle menu when hamburger is clicked
   hamburger.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent this click from triggering outside-click close
+    e.stopPropagation(); // Prevent triggering outside-click close
     navMenu.classList.toggle('show');
   });
 
@@ -44,6 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
         !hamburger.contains(e.target)) {
       navMenu.classList.remove('show');
     }
+  });
+
+  // Close menu when scrolling
+  window.addEventListener('scroll', () => {
+    if (navMenu.classList.contains('show')) {
+      // Close if scrolling down OR up
+      if (Math.abs(window.scrollY - lastScrollY) > 10) {
+        navMenu.classList.remove('show');
+      }
+    }
+    lastScrollY = window.scrollY;
   });
 });
 
@@ -271,5 +283,6 @@ document.querySelector('.contact-nav').addEventListener('click', function(e) {
     modal.classList.add('show');
   }, 800); // delay to match scroll speed
 });
+
 
 
