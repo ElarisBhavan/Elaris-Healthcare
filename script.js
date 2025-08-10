@@ -2,17 +2,17 @@
 const header = document.getElementById('main-header');
 let prevScrollPos = window.pageYOffset;
 
-// ✅ Make sure header is visible on load
+// Make sure header is visible on load
 header.style.top = '0';
 
 window.addEventListener('scroll', () => {
   const currentScrollPos = window.pageYOffset;
 
   if (prevScrollPos > currentScrollPos || currentScrollPos <= 0) {
-    // Scrolling up or top of page — show header
+    // Scrolling up — show header smoothly
     header.style.top = '0';
   } else {
-    // Scrolling down — hide header
+    // Scrolling down — hide header instantly
     header.style.top = '-100px';
   }
 
@@ -24,15 +24,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const hamburger = document.querySelector('.hamburger');
   const navMenu = document.querySelector('.nav-menu');
 
-  hamburger.addEventListener('click', () => {
+  // Toggle menu when hamburger is clicked
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent this click from triggering outside-click close
     navMenu.classList.toggle('show');
   });
 
-  // Optional: close menu after clicking a link
+  // Close menu after clicking a link
   document.querySelectorAll('.nav-menu a').forEach(link => {
     link.addEventListener('click', () => {
       navMenu.classList.remove('show');
     });
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (navMenu.classList.contains('show') && 
+        !navMenu.contains(e.target) && 
+        !hamburger.contains(e.target)) {
+      navMenu.classList.remove('show');
+    }
   });
 });
 
@@ -140,50 +151,74 @@ window.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const helpItems = document.querySelectorAll(".help-item");
-const tooltipBox = document.getElementById("tooltipBox");
+  const tooltipBox = document.getElementById("tooltipBox");
 
-let currentItem = null;
+  let currentItem = null;
+  const isTouchDevice = window.matchMedia("(hover: none)").matches;
 
-helpItems.forEach(item => {
-  item.addEventListener("click", (e) => {
-    e.stopPropagation(); // prevent from closing immediately
-    const desc = item.getAttribute("data-tooltip");
+  helpItems.forEach(item => {
+    // Only for mobile: click behavior
+    if (isTouchDevice) {
+      item.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const desc = item.getAttribute("data-tooltip");
 
-    // Toggle if same item clicked again
-    if (currentItem === item) {
+        if (currentItem === item) {
+          tooltipBox.style.display = "none";
+          currentItem = null;
+          return;
+        }
+
+        currentItem = item;
+        tooltipBox.innerText = desc;
+        tooltipBox.style.display = "block";
+
+        const rect = item.getBoundingClientRect();
+        const boxWidth = tooltipBox.offsetWidth;
+        const boxHeight = tooltipBox.offsetHeight;
+
+        const left = rect.left + rect.width / 2 - boxWidth / 2;
+        const top = rect.top + window.scrollY - boxHeight - 12;
+
+        tooltipBox.style.left = `${left}px`;
+        tooltipBox.style.top = `${top}px`;
+      });
+    } else {
+      // Only for desktop: hover behavior
+      item.addEventListener("mouseenter", () => {
+        const desc = item.getAttribute("data-tooltip");
+        tooltipBox.innerText = desc;
+        tooltipBox.style.display = "block";
+
+        const rect = item.getBoundingClientRect();
+        const boxWidth = tooltipBox.offsetWidth;
+        const boxHeight = tooltipBox.offsetHeight;
+
+        const left = rect.left + rect.width / 2 - boxWidth / 2;
+        const top = rect.top + window.scrollY - boxHeight - 12;
+
+        tooltipBox.style.left = `${left}px`;
+        tooltipBox.style.top = `${top}px`;
+      });
+
+      item.addEventListener("mouseleave", () => {
+        tooltipBox.style.display = "none";
+      });
+    }
+  });
+
+  // Global events for mobile
+  if (isTouchDevice) {
+    document.addEventListener("click", () => {
       tooltipBox.style.display = "none";
       currentItem = null;
-      return;
-    }
+    });
 
-    currentItem = item;
-    tooltipBox.innerText = desc;
-    tooltipBox.style.display = "block";
-
-    // Get position and center above
-    const rect = item.getBoundingClientRect();
-    const boxWidth = tooltipBox.offsetWidth;
-    const boxHeight = tooltipBox.offsetHeight;
-
-    const left = rect.left + rect.width / 2 - boxWidth / 2;
-    const top = rect.top + window.scrollY - boxHeight - 12;
-
-    tooltipBox.style.left = `${left}px`;
-    tooltipBox.style.top = `${top}px`;
-  });
-});
-
-// Hide tooltip on outside click
-document.addEventListener("click", () => {
-  tooltipBox.style.display = "none";
-  currentItem = null;
-});
-
-// Hide tooltip on scroll
-window.addEventListener("scroll", () => {
-  tooltipBox.style.display = "none";
-  currentItem = null;
-});
+    window.addEventListener("scroll", () => {
+      tooltipBox.style.display = "none";
+      currentItem = null;
+    });
+  }
 });
 
 ///*********Contact Us */
