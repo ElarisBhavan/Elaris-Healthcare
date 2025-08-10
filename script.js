@@ -1,61 +1,57 @@
-// Header hide-on-scroll functionality
-const header = document.getElementById('main-header');
-let prevScrollPos = window.pageYOffset;
-
-// Make sure header is visible on load
-header.style.top = '0';
-
-window.addEventListener('scroll', () => {
-  const currentScrollPos = window.pageYOffset;
-
-  if (prevScrollPos > currentScrollPos || currentScrollPos <= 0) {
-    // Scrolling up — show header smoothly
-    header.style.top = '0';
-  } else {
-    // Scrolling down — hide header instantly
-    header.style.top = '-100px';
-  }
-
-  prevScrollPos = currentScrollPos;
-});
-
-
 document.addEventListener('DOMContentLoaded', () => {
+  const header = document.getElementById('main-header');
+  const heroSection = document.querySelector('#home'); // your hero section ID
   const hamburger = document.querySelector('.hamburger');
   const navMenu = document.querySelector('.nav-menu');
   let lastScrollY = window.scrollY;
+  let prevScrollPos = window.pageYOffset;
 
-  // Toggle menu when hamburger is clicked
+  // --- Mobile Menu Toggle ---
   hamburger.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent triggering outside-click close
+    e.stopPropagation();
     navMenu.classList.toggle('show');
   });
 
-  // Close menu after clicking a link
   document.querySelectorAll('.nav-menu a').forEach(link => {
     link.addEventListener('click', () => {
       navMenu.classList.remove('show');
     });
   });
 
-  // Close menu when clicking outside
   document.addEventListener('click', (e) => {
-    if (navMenu.classList.contains('show') && 
-        !navMenu.contains(e.target) && 
+    if (navMenu.classList.contains('show') &&
+        !navMenu.contains(e.target) &&
         !hamburger.contains(e.target)) {
       navMenu.classList.remove('show');
     }
   });
 
-  // Close menu when scrolling
   window.addEventListener('scroll', () => {
+    // Close menu if scrolling
     if (navMenu.classList.contains('show')) {
-      // Close if scrolling down OR up
       if (Math.abs(window.scrollY - lastScrollY) > 10) {
         navMenu.classList.remove('show');
       }
     }
     lastScrollY = window.scrollY;
+
+    // --- Header Show/Hide Based on Hero Section ---
+    const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+    const currentScrollPos = window.pageYOffset;
+
+    if (currentScrollPos < heroBottom) {
+      // Inside hero section → keep header visible
+      header.style.top = '0';
+    } else {
+      // Past hero section → hide on scroll down, show on scroll up
+      if (prevScrollPos > currentScrollPos) {
+        header.style.top = '0';
+      } else {
+        header.style.top = '-100px';
+      }
+    }
+
+    prevScrollPos = currentScrollPos;
   });
 });
 
@@ -283,6 +279,7 @@ document.querySelector('.contact-nav').addEventListener('click', function(e) {
     modal.classList.add('show');
   }, 800); // delay to match scroll speed
 });
+
 
 
 
